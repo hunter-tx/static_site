@@ -21,7 +21,7 @@ class HTMLNode:
 
 class LeafNode(HTMLNode):
     def __init__(self, tag=None, value=None, props=None):
-        super().__init__(tag, value, children=None, props=props)
+        super().__init__(tag, value, None, props=props)
 
     def to_html(self):
         if self.value is None:
@@ -30,8 +30,26 @@ class LeafNode(HTMLNode):
             return self.value
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
-node = LeafNode("p", "This is a paragraph of text.").to_html()
-node2 = LeafNode("a", "Click me!", {"href": "https://www.google.com"}).to_html()
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
 
-print(node)
-print(node2)
+    def to_html(self):
+        if not self.tag:
+            raise ValueError("ParentNode must have tag")
+        if not self.children:
+            raise ValueError("ParentNode must have children")
+
+        html_content = ""
+        skipped_children = []
+        for child in self.children:
+            try:
+                # Append valid child HTML
+                html_content += child.to_html()
+            except ValueError:
+                # Skip invalid children
+                skipped_children.append(child)
+        if not html_content:
+            raise ValueError("No valid children to render")
+        tag = f'<{self.tag}{self.props_to_html()}>{html_content}</{self.tag}>'
+        return tag
