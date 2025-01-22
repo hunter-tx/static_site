@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html1(self):
@@ -18,7 +18,27 @@ class TestHTMLNode(unittest.TestCase):
         expected =  ' href="https://www.google.com" target="_blank"'
         self.assertEqual(node.props_to_html(), expected)
 
+    def test_leaf_node1(self):
+        leaf = LeafNode("p", "Hello world").to_html()
+        expected = "<p>Hello world</p>"
+        self.assertEqual(leaf, expected)
+
+    def test_leaf_node2(self):
+        leaf = LeafNode("a", "Click me!", {"href": "https://www.google.com"}).to_html()
+        expected = '<a href="https://www.google.com">Click me!</a>'
+        self.assertEqual(leaf, expected)
+
+    def test_leaf_node3(self):
+        leaf = LeafNode(value="Just some text").to_html()
+        expected = "Just some text"
+        self.assertEqual(leaf, expected)
+
+    def test_no_value_raises_error(self):
+        leaf = LeafNode("p")
+        with self.assertRaisesRegex(ValueError, "LeafNode must have a value"):
+            leaf.to_html()
+
+
 
 if __name__ == "__main__":
     unittest.main()
-    
