@@ -1,7 +1,7 @@
 from enum import Enum
 
 class TextType(Enum):
-    NORMAL = "normal"
+    TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
     CODE = "code"
@@ -11,6 +11,8 @@ class TextType(Enum):
 
 class TextNode:
     def __init__(self, text, text_type, url=None):
+        if not isinstance(text_type, TextType):
+            raise ValueError("text_type must be a TextType enum value")
         self.text = text
         self.text_type = text_type
         self.url = url
