@@ -1,11 +1,13 @@
-# # test/test_text_node_to_html_node.py
-#
-# import unittest
-# from textnode import TextNode, TextType
-# from htmlnode import LeafNode
-# from inline_markdown import text_node_to_html_node
-#
-# class TestTextNodeToHtmlNode(unittest.TestCase):
+# test/test_text_node_to_html_node.py
+
+import unittest
+
+from src.inline_markdown import extract_markdown_images
+from textnode import TextNode, TextType
+from htmlnode import LeafNode
+from inline_markdown import *
+
+class TestTextNodeToHtmlNode(unittest.TestCase):
 #     def test_basic_text(self):
 #         # Basic text
 #         node = TextNode("Hello", TextType.TEXT)
@@ -42,3 +44,20 @@
 #         # Invalid type test
 #         with self.assertRaises(ValueError):
 #             invalid_node = TextNode("test", "invalid")
+
+    def test_extract_images(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        test = extract_markdown_images(text)
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")]
+        self.assertEqual(test, expected)
+
+    def test_extract_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        test = extract_markdown_links(text)
+        expected = [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
+        self.assertEqual(test, expected)
+
+
+
+if __name__ == "__main__":
+    unittest.main()
