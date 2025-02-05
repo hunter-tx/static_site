@@ -106,19 +106,3 @@ def text_to_textnodes(text):
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     return nodes
-
-def markdown_to_blocks(markdown):
-    split_strings = markdown.split("\n\n")
-    returned_list = []
-    for string in split_strings:
-        if not string:
-            continue
-        returned_list.append(string.strip())
-    return returned_list
-
-
-example_block = ("# This is a heading\n"
-                 "\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n"
-                 "\n* This is the first list item in a list block\n* This is a list item"
-                 "\n* This is another list item")
-print(markdown_to_blocks(example_block))
