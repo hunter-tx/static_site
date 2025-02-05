@@ -84,6 +84,7 @@ class TestSplitNodes(unittest.TestCase):
     #         TextNode("link", TextType.LINK, "https://boot.dev"),
     #     ]
     #     self.assertEqual(test, expected)
+    pass
 
 
 if __name__ == "__main__":
