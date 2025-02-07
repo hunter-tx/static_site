@@ -16,6 +16,17 @@ class HTMLNode:
             string += f' {prop}="{self.props[prop]}"'
         return string
 
+    def __eq__(self, compare):
+        if (
+            self.tag == compare.tag and
+            self.value == compare.value and
+            self.children == compare.children and
+            self.props == compare.props
+        ):
+            return True
+        return False
+
+
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
 
