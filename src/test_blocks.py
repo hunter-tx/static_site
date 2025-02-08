@@ -1,4 +1,6 @@
 import unittest
+from math import expm1
+
 from markdown_blocks import *
 
 class TestBlocks(unittest.TestCase):
@@ -106,6 +108,29 @@ class TestBlocks(unittest.TestCase):
         ])
         self.assertEqual(test, should_return)
 
+    def test_extract_title(self):
+        markdown = "# This is a title"
+        test = extract_title(markdown)
+        expected = "This is a title"
+        self.assertEqual(test, expected)
 
+    def test_extract_title_exception(self):
+        markdown = "## This is not a title"
+        with self.assertRaises(Exception):
+            extract_title(markdown)
+
+    def test_title_from_blocks(self):
+        markdown = ("# This is the title of the markdown\n\n"
+                    "This block is a paragraph\na long paragraph\nthat is three lines\n\n"
+                    "```\nThis block is a demonstration of some code\nprint('Hello World!')\n```\n\n"
+                    ">This is a quote from someone important\n\n"
+                    "- This is my grocery list\n- apples\n- bananas\n- grapes\n- peanut butter\n\n"
+                    "#### How to spread peanut butter\n\n"
+                    "1. grab the jar of peanut butter\n2. open the jar\n"
+                    "3. scoop peanut butter with the knife\n4. spread it on the bread"
+                    )
+        test = extract_title(markdown)
+        expected = "This is the title of the markdown"
+        self.assertEqual(test, expected)
 if __name__ == "__main__":
     unittest.main()

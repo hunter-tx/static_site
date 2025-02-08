@@ -1,5 +1,6 @@
 from htmlnode import *
 from textnode import *
+from inline_markdown import *
 
 
 
@@ -63,23 +64,23 @@ def markdown_to_html_node(markdown):
     return ParentNode(tag="div", children=child_nodes)
 
 def paragraph_to_html_node(block):
-    return LeafNode("p", block)
+    return ParentNode("p", text_to_html_node(block))
 
 def heading_to_html_node(block):
     header_num = block.count("#")
     text = block.strip("#").strip()
-    return LeafNode(tag=f"h{header_num}", value=text)
+    return ParentNode(tag=f"h{header_num}", children=text_to_html_node(text))
 
 def code_to_html_node(block):
     text = block.strip("```").strip("\n")
-    return LeafNode("code" ,text)
+    return ParentNode("code" ,children=text_to_html_node(text))
 
 def quote_to_html_node(block):
     quote_lines = block.split("\n")
     for i in range(len(quote_lines)):
-        quote_lines[i] = quote_lines[i][1:]
+        quote_lines[i] = quote_lines[i][1:].strip()
     text = "\n".join(quote_lines)
-    return LeafNode("blockquote", text)
+    return ParentNode("blockquote", children=text_to_html_node(text))
 
 def list_to_html_node(block):
     type = block_to_block_type(block)
@@ -95,5 +96,20 @@ def list_to_html_node(block):
             list_items[i] = list_items[i][3:]
     list_children = []
     for item in list_items:
-        list_children.append(LeafNode(tag="li", value=item))
+        list_children.append(ParentNode(tag="li", children=text_to_html_node(item)))
     return ParentNode(tag, list_children)
+
+def text_to_html_node(text):
+    text_nodes = text_to_textnodes(text)
+    children = []
+    for text_node in text_nodes:
+        html_node = text_node_to_html_node(text_node)
+        children.append(html_node)
+    return children
+
+
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+    if not blocks[0].startswith("# "):
+        raise Exception("Markdown missing Title")
+    return blocks[0][2:].strip()
