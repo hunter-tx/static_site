@@ -6,10 +6,6 @@ from textnode import *
 from inline_markdown import *
 from markdown_blocks import *
 
-markdown_path = "../content/index.md"
-template_path = "../template.html"
-destination_path = "../public/index.html"
-content_path = "../content"
 
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from{from_path} to {dest_path} using {template_path}...")
@@ -23,7 +19,7 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(markdown_text)
     template_text = template_text.replace("{{ Title }}", title)
     template_text = template_text.replace("{{ Content }}", markdown_as_html)
-    with open(destination_path, "w") as file:
+    with open(dest_path, "w") as file:
         file.write(template_text)
     print("Page generated")
 
@@ -36,7 +32,9 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
             source_filepath = dir_path_content + f"/{content}"
             destination_filepath = dest_dir_path + f"/{content}"
             if os.path.isfile(source_filepath):
-                generate_page(source_filepath, template_path, destination_filepath)
+                html_dest = destination_filepath.replace(".md", ".html")
+                print(destination_filepath)
+                generate_page(source_filepath, template_path, html_dest)
             else:
                 os.mkdir(destination_filepath)
                 generate_pages_recursive(source_filepath,template_path, destination_filepath)

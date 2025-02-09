@@ -5,11 +5,11 @@ from htmlnode import *
 from markdown_blocks import *
 from generate_page import *
 
-SOURCE = "../static"
-DESTINATION = "../public"
-content_path = "../content"
-template_path = "../template.html"
-destination_path = "../public"
+SOURCE = "./static"
+DESTINATION = "./public"
+content_path = "./content"
+template_path = "./template.html"
+destination_path = "./public"
 
 def main():
     print("Deleting public directory...")
