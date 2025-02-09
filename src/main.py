@@ -5,11 +5,11 @@ from htmlnode import *
 from markdown_blocks import *
 from generate_page import *
 
-SOURCE = "/Users/hunterhughes/Coding/workspace/github.com/hunter-tx/static_site/static"
-DESTINATION = "/Users/hunterhughes/Coding/workspace/github.com/hunter-tx/static_site/public"
-markdown_path = "/Users/hunterhughes/Coding/workspace/github.com/hunter-tx/static_site/content/index.md"
-template_path = "/Users/hunterhughes/Coding/workspace/github.com/hunter-tx/static_site/template.html"
-destination_path = "/Users/hunterhughes/Coding/workspace/github.com/hunter-tx/static_site/public/index.html"
+SOURCE = "./static"
+DESTINATION = "./public"
+content_path = "./content"
+template_path = "./template.html"
+destination_path = "./public"
 
 def main():
     print("Deleting public directory...")
@@ -18,7 +18,7 @@ def main():
     os.mkdir(DESTINATION)
     print("Copying static files to public directory...")
     copy_source_to_destination(SOURCE,DESTINATION)
-    generate_page(markdown_path, template_path, destination_path)
+    generate_pages_recursive(content_path, template_path, destination_path)
 
 def copy_source_to_destination(source, destination):
     if os.path.exists(source):
@@ -33,3 +33,4 @@ def copy_source_to_destination(source, destination):
                 copy_source_to_destination(source_filepath, destination_filepath)
 
 main()
+
